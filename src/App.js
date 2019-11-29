@@ -4,31 +4,19 @@
 
 import React, { Component } from 'react';
 import HomePage from "./pages/homepage/homepage.component";
+import ShopPage from "./pages/shoppage/shoppage.component";
 import { Switch, Route } from "react-router-dom";
 import './App.css';
-
-
-const Hats = () => (
-  <div className="hats">
-    HATS PAGE
-  </div>
-)
-
-const Jackets = () => (
-  <div className="jackets">
-    JACKETS PAGE
-  </div>
-)
-
+import Header from './components/header/header.component';
 
 class App extends Component {
   render() {
     return (
       <div>
+        <Header/>
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route path="/hats" component={Hats} />
-          <Route path="/jackets" component={Jackets} />
+          <Route path="/shoppage" component={ShopPage} />
         </Switch>
 
       </div>

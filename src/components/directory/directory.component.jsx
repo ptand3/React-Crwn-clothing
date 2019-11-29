@@ -7,7 +7,6 @@ import "./directory.styles.scss";
 export default class Directory extends Component {
     constructor() {
         super();
-        console.log("constructor initiated");
         this.state = {
             sections: [
                 {
