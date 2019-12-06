@@ -11,6 +11,8 @@ import SignInAndSignUpComponent from "./components/sign-in-and-sign-up/sign-in-a
 import './App.css';
 import { auth } from "./firebase/firebase.utils";
 
+import { createUserProfileDocument } from "./firebase/firebase.utils";
+
 class App extends Component {
   constructor() {
     super();
@@ -23,9 +25,22 @@ class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {  //Open Subscription or open messaging to get the currently signed in user
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user });
-      console.log(user);
+    this.unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {  //user authenticated object with lot of properties
+
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+
+        userRef.onSnapshot(snaphot => {
+          this.setState({     //setting the state of the current user in our app
+            currentUser: {
+              id: snaphot.id,
+              ...snaphot.data()
+            }
+          });
+        });
+      }
+
+      this.setState({ currentUser: userAuth });  //when the user is signed out
     });
   };
   componentWillUnmount() {
@@ -36,7 +51,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Header currentUser ={this.state.currentUser} />
+        <Header currentUser={this.state.currentUser} />
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shoppage" component={ShopPage} />

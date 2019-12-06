@@ -16,6 +16,35 @@ const config = {
     measurementId: "G-ZX6SC9DRHH"
 }
 
+
+//storing user authenticated object to firebase Database.We are using async and await for making an API request
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+    if (!userAuth) return;
+
+    const userRef = firestore.doc(`users/${userAuth.uid}`); //doc reference obj
+    const snapShot = await userRef.get();  //snap shot of the data
+
+    if (!snapShot.exists) //if there is no user data create user data
+    {
+        const { displayName, email } = userAuth;
+        const createDate = new Date();
+
+        try {
+            await userRef.set({  //creating up a new data
+                displayName,
+                email,
+                createDate,
+                ...additionalData
+            });
+
+        }
+        catch (error) {
+
+        }
+    }
+    return userRef;
+}
+
 //Initialize our firebase
 firebase.initializeApp(config);
 
