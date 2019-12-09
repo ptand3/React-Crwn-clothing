@@ -10,39 +10,36 @@ import Header from './components/header/header.component';
 import SignInAndSignUpComponent from "./components/sign-in-and-sign-up/sign-in-and-sign-up.component";
 import './App.css';
 import { auth } from "./firebase/firebase.utils";
+import { connect } from "react-redux";
+import { setCurrentUser } from "./redux/user/user-actions";
 
 import { createUserProfileDocument } from "./firebase/firebase.utils";
 
 class App extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      currentUser: null
-    }
-  }
 
   unsubscribeFromAuth = null;
 
   componentDidMount() {  //Open Subscription or open messaging to get the currently signed in user
-    this.unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {  //user authenticated object with lot of properties
+    const {setCurrentUser } = this.props;
+
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {  //user authenticated object with lot of properties
 
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
 
         userRef.onSnapshot(snaphot => {
-          this.setState({     //setting the state of the current user in our app
-            currentUser: {
-              id: snaphot.id,
-              ...snaphot.data()
-            }
+          //setting the state of the current user in our app
+          setCurrentUser({
+            id: snaphot.id,
+            ...snaphot.data()
           });
         });
       }
 
-      this.setState({ currentUser: userAuth });  //when the user is signed out
+      setCurrentUser(userAuth);  //when the user is signed out
     });
   };
+
   componentWillUnmount() {
     this.unsubscribeFromAuth();
   }
@@ -51,7 +48,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Header currentUser={this.state.currentUser} />
+        <Header />
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shoppage" component={ShopPage} />
@@ -64,5 +61,11 @@ class App extends Component {
   }
 }
 
-export default App;
+///The functions to dispatch actions to the Reducers
+//Each field in the object will become a separate prop for your own component, and the value should normally be a function that dispatches an action when called.
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user)) //dispatch property dispatches the action object whenver called
+});
+
+export default connect(null, mapDispatchToProps)(App);
 

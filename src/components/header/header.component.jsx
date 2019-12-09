@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import "./header.styles.scss";
 import { auth } from "../../firebase/firebase.utils";
+import {connect } from "react-redux";
 
-const Header = ({ currentUser }) => (
+const Header = ({ currentUser }) => (  //recieving the updated user value from the UserReducer
     <div className="header">
         <Link className="logo-container" to="/">
             <Logo />
@@ -21,7 +22,10 @@ const Header = ({ currentUser }) => (
             }
         </div>
     </div>
-
-
 )
-export default Header;
+
+const mapStateToProps = state =>({  //The function is called whenever the store state changes
+    user : state.user.currentUser
+});
+
+export default connect(mapStateToProps)(Header);  //Connect is a HOC that takes in the component as an arg and another function to connect the React Component to Redux Store
