@@ -3,24 +3,23 @@
 
 
 import React, { Component } from 'react';
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shoppage/shoppage.component";
 import Header from './components/header/header.component';
 import SignInAndSignUpComponent from "./components/sign-in-and-sign-up/sign-in-and-sign-up.component";
 import './App.css';
-import { auth } from "./firebase/firebase.utils";
 import { connect } from "react-redux";
 import { setCurrentUser } from "./redux/user/user-actions";
+import { auth ,createUserProfileDocument } from "./firebase/firebase.utils";
 
-import { createUserProfileDocument } from "./firebase/firebase.utils";
 
 class App extends Component {
 
   unsubscribeFromAuth = null;
 
   componentDidMount() {  //Open Subscription or open messaging to get the currently signed in user
-    const {setCurrentUser } = this.props;
+    const { setCurrentUser } = this.props;
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {  //user authenticated object with lot of properties
 
@@ -52,7 +51,8 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shoppage" component={ShopPage} />
-          <Route path="/signin" component={SignInAndSignUpComponent} />
+          {/* <Route path="/signin" component={SignInAndSignUpComponent} /> */}
+          <Route exact path="/signin" render = { () => this.props.currentUser ? (<Redirect to ="/"/>) : (<SignInAndSignUpComponent/>) } />
 
         </Switch>
 
@@ -61,11 +61,15 @@ class App extends Component {
   }
 }
 
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+});
+
 ///The functions to dispatch actions to the Reducers
 //Each field in the object will become a separate prop for your own component, and the value should normally be a function that dispatches an action when called.
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user)) //dispatch property dispatches the action object whenver called
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps,mapDispatchToProps)(App);
 

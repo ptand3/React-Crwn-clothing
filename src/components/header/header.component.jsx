@@ -6,6 +6,7 @@ import { auth } from "../../firebase/firebase.utils";
 import {connect } from "react-redux";
 
 const Header = ({ currentUser }) => (  //recieving the updated user value from the UserReducer
+
     <div className="header">
         <Link className="logo-container" to="/">
             <Logo />
@@ -25,7 +26,7 @@ const Header = ({ currentUser }) => (  //recieving the updated user value from t
 )
 
 const mapStateToProps = state =>({  //The function is called whenever the store state changes
-    user : state.user.currentUser
+    currentUser : state.user.currentUser
 });
 
 export default connect(mapStateToProps)(Header);  //Connect is a HOC that takes in the component as an arg and another function to connect the React Component to Redux Store
