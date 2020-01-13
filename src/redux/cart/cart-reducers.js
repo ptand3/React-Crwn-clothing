@@ -1,7 +1,8 @@
 import CartActionTypes from "./cart-types";
 
 const INITIAL_STATE = {
-    hidden: true   //Initially the cart is hidden  when the page loads
+    hidden: true  , //Initially the cart is hidden  when the page loads
+    cartItems : [] //initially the cart item is empty
 }
 
 const CartReducer = (state = INITIAL_STATE, action) => {
@@ -11,7 +12,11 @@ const CartReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 hidden: !state.hidden
             }
-
+        case CartActionTypes.ADD_ITEM :
+            return {
+                ...state ,
+                cartItems : [...state.cartItems , action.payload ] //new cartitems array is cartitem with loaded items and the payload of that action type
+            }
         default:
             return state;
     }
