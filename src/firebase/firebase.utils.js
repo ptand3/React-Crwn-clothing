@@ -43,7 +43,9 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         }
     }
     return userRef;
+
 }
+
 
 //Initialize our firebase
 firebase.initializeApp(config);

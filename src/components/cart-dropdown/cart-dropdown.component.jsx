@@ -4,6 +4,7 @@ import CustomButton from "../custom-button/custom-button.component";
 import CartItem from "../cart-item/cart-item.component";
 import { connect } from "react-redux";
 import  { selectCartItems }  from "../../redux/cart/cart-selectors" ;
+import { createStructuredSelector } from "reselect";
 
 
 
@@ -21,8 +22,8 @@ const CartDropDown = ({ cartItems }) => {
     )
 }
 
-const mapStateToProps = (state) => ({ //mapStateToProps will return the palin object containing the data from the store that the component needs
-    cartItems : selectCartItems(state)
+const mapStateToProps = createStructuredSelector({ //mapStateToProps will return the palin object containing the data from the store that the component needs
+    cartItems : selectCartItems
 })
 
 export default connect(mapStateToProps)(CartDropDown);  //connect allows the component to connect to the store

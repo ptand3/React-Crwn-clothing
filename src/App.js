@@ -11,6 +11,7 @@ import SignInAndSignUpComponent from "./components/sign-in-and-sign-up/sign-in-a
 import './App.css';
 import { connect } from "react-redux";
 import { setCurrentUser } from "./redux/user/user-actions";
+import { selectCurrentUser }  from "./redux/user/user-selectors" ;
 import { auth ,createUserProfileDocument } from "./firebase/firebase.utils";
 
 
@@ -61,9 +62,10 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser
+const mapStateToProps = (state) => ({
+  currentUser : selectCurrentUser(state)
 });
+
 
 ///The functions to dispatch actions to the Reducers
 //Each field in the object will become a separate prop for your own component, and the value should normally be a function that dispatches an action when called.
