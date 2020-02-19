@@ -11,7 +11,7 @@ const selectCart = state => state.cart;  //input selectors dont use createSelect
 export const selectCartItems = createSelector(
     [selectCart],
     cart => cart.cartItems  //we take only the selected cart state property 
-); 
+);
 
 export const selectCartItemsCount = createSelector(
     [selectCartItems],
@@ -20,6 +20,13 @@ export const selectCartItemsCount = createSelector(
     )
 );
 export const selectCartHidden = createSelector(
-    [selectCart] ,
+    [selectCart],
     cart => cart.hidden
+);
+
+export const selectCartTotal = createSelector(
+    [selectCartItems],
+    cartItems => cartItems.reduce((accumulatedQuantity, cartItem) =>
+        accumulatedQuantity + cartItem.quantity + cartItem.price, 0
+    )
 );

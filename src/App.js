@@ -7,11 +7,12 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shoppage/shoppage.component";
 import Header from './components/header/header.component';
+import CheckOutPage  from "./pages/checkoutpage/checkoutpage.component" ;
 import SignInAndSignUpComponent from "./components/sign-in-and-sign-up/sign-in-and-sign-up.component";
 import './App.css';
 import { connect } from "react-redux";
 import { setCurrentUser } from "./redux/user/user-actions";
-import { selectCurrentUser }  from "./redux/user/user-selectors" ;
+//import { selectCurrentUser }  from "./redux/user/user-selectors" ;
 import { auth ,createUserProfileDocument } from "./firebase/firebase.utils";
 
 
@@ -52,7 +53,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shoppage" component={ShopPage} />
-          {/* <Route path="/signin" component={SignInAndSignUpComponent} /> */}
+          <Route exacct path="/checkoutpage" component={CheckOutPage} />
           <Route exact path="/signin" render = { () => this.props.currentUser ? (<Redirect to ="/"/>) : (<SignInAndSignUpComponent/>) } />
 
         </Switch>
@@ -62,8 +63,8 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  currentUser : selectCurrentUser(state)
+const mapStateToProps = ( { user :{currentUser} }) => ({
+  currentUser
 });
 
 

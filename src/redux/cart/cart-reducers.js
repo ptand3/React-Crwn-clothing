@@ -1,9 +1,10 @@
 import CartActionTypes from "./cart-types";
- import { addItemToCart }  from  "../cart/cart-utils" ;
+import { addItemToCart } from "../cart/cart-utils";
+import { removeItemFromCart } from "../cart/cart-utils";
 
 const INITIAL_STATE = {
-    hidden: true  , //Initially the cart is hidden  when the page loads
-    cartItems : [] //initially the cart item is empty
+    hidden: true, //Initially the cart is hidden  when the page loads
+    cartItems: [] //initially the cart item is empty
 }
 
 const CartReducer = (state = INITIAL_STATE, action) => {
@@ -13,16 +14,29 @@ const CartReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 hidden: !state.hidden
             }
-        case CartActionTypes.ADD_ITEM :
+        case CartActionTypes.ADD_ITEM:
             return {
-                ...state ,
-                cartItems :  addItemToCart(state.cartItems , action.payload)//new cartitems array is cartitem with loaded items and the payload of that action type
+                ...state,
+                cartItems: addItemToCart(state.cartItems, action.payload)//new cartitems array is cartitem with loaded items and the payload of that action type
+            }
+
+        case CartActionTypes.REMOVE_ITEM:
+            return {
+                ...state,
+                cartItems: removeItemFromCart(state.cartItems, action.payload)
+            }
+        case CartActionTypes.CLEAR_ITEM_FROM_CART:
+            return {
+                ...state,
+                cartItems: state.cartItems.filter(
+                    cartItem => cartItem.id !== action.payload.id
+                )
             }
         default:
             return state;
     }
 }
 
-export default CartReducer ;
+export default CartReducer;
 
 
